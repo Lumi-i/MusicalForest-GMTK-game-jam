@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://d0760y3hk6f14"]
+
+[ext_resource type="Texture2D" uid="uid://x3d1j4vvo6sd" path="res://assets/art/icon.svg" id="1_cjrmd"]
+[ext_resource type="Script" path="res://scenes/tree.gd" id="1_vny4o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nr0i8"]
+size = Vector2(9, 3.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mqs6n"]
+radius = 36.0
+
+[node name="tree" type="CharacterBody2D"]
+script = ExtResource("1_vny4o")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+debug_path_custom_color = Color(1, 0.603922, 1, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1.5, -0.125001)
+scale = Vector2(0.0703125, 0.236328)
+texture = ExtResource("1_cjrmd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 13.75)
+shape = SubResource("RectangleShape2D_nr0i8")
+
+[node name="detection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection"]
+shape = SubResource("CircleShape2D_mqs6n")

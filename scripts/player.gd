@@ -15,6 +15,8 @@ var current_item = "nothing"
 var cooldown_switch = 1
 var can_switch = true
 
+var is_detected = false
+
 @onready var player_sprite: Sprite2D = $Sprite2D
 
 func _ready():
@@ -22,9 +24,7 @@ func _ready():
 
 
 func _physics_process(delta: float) -> void:
-	
-
-
+	print(is_detected)
 	
 	if Input.is_action_pressed("up"):
 		dir = Vector2(0, -1)
@@ -57,3 +57,6 @@ func pick_up_flute():
 	can_switch = false
 	await get_tree().create_timer(cooldown_switch).timeout
 	can_switch = true
+
+func melody():
+	is_detected = true

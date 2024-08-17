@@ -1,8 +1,15 @@
-[gd_scene load_steps=6 format=4 uid="uid://bqfil16mw8a0y"]
+[gd_scene load_steps=8 format=4 uid="uid://bqfil16mw8a0y"]
 
 [ext_resource type="PackedScene" uid="uid://dlcrgh2g2au3a" path="res://scenes/player.tscn" id="1_bwrk5"]
 [ext_resource type="PackedScene" uid="uid://vvh5ra3b2x4v" path="res://scenes/flute_on_ground.tscn" id="2_a71p7"]
 [ext_resource type="Texture2D" uid="uid://cudqx8wuetl1w" path="res://assets/art/tileset_plains_070419_zp.png" id="3_2tarw"]
+[ext_resource type="PackedScene" uid="uid://d0760y3hk6f14" path="res://scenes/tree.tscn" id="4_gw4dx"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_gg81n"]
+vertices = PackedVector2Array(390, 186, 399, 274, 225, 270, 231, 177)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(399, 274, 390, 186, 231, 177, 225, 270)])
+agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8348a"]
 texture = ExtResource("3_2tarw")
@@ -86,7 +93,9 @@ texture = ExtResource("3_2tarw")
 6:4/0 = 0
 7:4/0 = 0
 8:4/0 = 0
+9:4/next_alternative_id = 2
 9:4/0 = 0
+10:4/next_alternative_id = 2
 10:4/0 = 0
 12:4/0 = 0
 13:4/0 = 0
@@ -105,7 +114,9 @@ texture = ExtResource("3_2tarw")
 6:5/0 = 0
 7:5/0 = 0
 8:5/0 = 0
+9:5/next_alternative_id = 2
 9:5/0 = 0
+10:5/next_alternative_id = 2
 10:5/0 = 0
 12:5/0 = 0
 13:5/0 = 0
@@ -125,7 +136,9 @@ texture = ExtResource("3_2tarw")
 6:6/0 = 0
 7:6/0 = 0
 8:6/0 = 0
+9:6/next_alternative_id = 2
 9:6/0 = 0
+10:6/next_alternative_id = 2
 10:6/0 = 0
 11:6/0 = 0
 12:6/0 = 0
@@ -148,7 +161,9 @@ texture = ExtResource("3_2tarw")
 6:7/0 = 0
 7:7/0 = 0
 8:7/0 = 0
+9:7/next_alternative_id = 2
 9:7/0 = 0
+10:7/next_alternative_id = 2
 10:7/0 = 0
 11:7/0 = 0
 13:7/0 = 0
@@ -170,7 +185,6 @@ texture = ExtResource("3_2tarw")
 6:8/0 = 0
 7:8/0 = 0
 8:8/0 = 0
-13:8/0 = 0
 14:8/0 = 0
 15:8/0 = 0
 16:8/0 = 0
@@ -225,6 +239,7 @@ texture = ExtResource("3_2tarw")
 19:10/0 = 0
 20:10/0 = 0
 21:10/0 = 0
+22:10/next_alternative_id = 2
 22:10/0 = 0
 0:11/0 = 0
 1:11/0 = 0
@@ -410,11 +425,18 @@ texture = ExtResource("3_2tarw")
 20:18/0 = 0
 21:18/0 = 0
 22:18/0 = 0
+13:8/0 = 0
+11:5/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_uouet"]
 sources/0 = SubResource("TileSetAtlasSource_8348a")
 
 [node name="world" type="Node2D"]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(15, 5)
+navigation_polygon = SubResource("NavigationPolygon_gg81n")
+use_edge_connections = false
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 rotation = 3.14159
@@ -428,3 +450,6 @@ position = Vector2(332, 232)
 [node name="flute_on_ground" parent="." instance=ExtResource("2_a71p7")]
 position = Vector2(359, 227)
 scale = Vector2(0.0624999, 0.0234375)
+
+[node name="tree" parent="." instance=ExtResource("4_gw4dx")]
+position = Vector2(300, 234)
