@@ -23,11 +23,8 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	
-	print(can_switch)
-	print(self.get_children())
 
 
-	
 	
 	if Input.is_action_pressed("up"):
 		dir = Vector2(0, -1)

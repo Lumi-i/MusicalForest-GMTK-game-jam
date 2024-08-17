@@ -20,3 +20,21 @@ Instruments:
 	- Accordion
 	- Harp
 	- Drum
+
+
+Environment:
+	Animals:
+		Butterflies
+		Frogs
+		Squirrel
+		Bugs
+		Big Spiders
+		Fireflies
+		Wolves
+		Snakes
+		
+	Nature:
+		Trees that walk
+		Vines
+		
+		

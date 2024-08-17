@@ -1,46 +1,75 @@
 extends Node2D
-class_name flute
+class_name Flute
 
 signal player_picked_up
 
-@onready var player: Player = $"../player"
-
+@onready var player: Player = $"../Player"
 @onready var sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
-var playing = false
+var current_input = []
+var max_melody_length = 10
+var delay_duration = 0.1  # Duration of the delay in seconds
+var is_delayed = false
 
-
+var melodies = {
+	"melody_1": ["do", "re", "mi"],
+	"melody_2": ["fa", "sol", "la"],
+	"melody_3": ["do", "fa", "la", "si"],
+	"seven_nation_army": ["la", "la", "do2", "la", "sol", "fa", "mi"]
+}
 
 func _physics_process(delta: float) -> void:
+	print(current_input)
+	
 	if Input.is_action_just_pressed("do"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/do.mp3")
-			sound.play()
+		play_note_with_delay("do", "res://assets/music/flute/do.mp3")
 	if Input.is_action_just_pressed("re"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/re.mp3")
-			sound.play()
+		play_note_with_delay("re", "res://assets/music/flute/re.mp3")
 	if Input.is_action_just_pressed("mi"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/mi.mp3")
-			sound.play()
+		play_note_with_delay("mi", "res://assets/music/flute/mi.mp3")
 	if Input.is_action_just_pressed("fa"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/fa.mp3")
-			sound.play()
+		play_note_with_delay("fa", "res://assets/music/flute/fa.mp3")
 	if Input.is_action_just_pressed("sol"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/sol.mp3")
-			sound.play()
+		play_note_with_delay("sol", "res://assets/music/flute/sol.mp3")
 	if Input.is_action_just_pressed("la"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/la.mp3")
-			sound.play()
+		play_note_with_delay("la", "res://assets/music/flute/la.mp3")
 	if Input.is_action_just_pressed("si"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/si.mp3")
-			sound.play()
+		play_note_with_delay("si", "res://assets/music/flute/si.mp3")
 	if Input.is_action_just_pressed("do2"):
-		if !playing:
-			sound.stream = load("res://assets/music/flute/do2.mp3")
-			sound.play()
+		play_note_with_delay("do2", "res://assets/music/flute/do2.mp3")
+
+func play_note_with_delay(note: String, audio_path: String) -> void:
+	if not is_delayed:
+		current_input.append(note)
+
+		if current_input.size() > max_melody_length:
+			current_input.pop_front()
+
+		# Play the note
+		var new_sound = AudioStreamPlayer2D.new()
+		add_child(new_sound)
+		new_sound.stream = ResourceLoader.load(audio_path) as AudioStream
+		new_sound.play()
+		
+		check_melodies()
+
+		# Add a short delay before the next note can be played
+		is_delayed = true
+		await get_tree().create_timer(delay_duration).timeout
+		is_delayed = false
+
+func _on_AudioStreamPlayer2D_finished():
+	queue_free()
+
+func check_melodies() -> void:
+	for melody_name in melodies.keys():
+		var melody = melodies[melody_name]
+		var melody_length = melody.size()
+
+		if current_input.size() >= melody_length:
+			var start_index = current_input.size() - melody_length
+			var recent_input = current_input.slice(start_index, current_input.size())
+			if recent_input == melody:
+				print(melody_name + " detected!")
+				current_input.clear()
+				break
