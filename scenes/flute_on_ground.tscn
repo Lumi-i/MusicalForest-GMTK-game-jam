@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://vvh5ra3b2x4v"]
+
+[ext_resource type="Texture2D" uid="uid://x3d1j4vvo6sd" path="res://assets/art/icon.svg" id="1_ixqvn"]
+[ext_resource type="Script" path="res://scenes/flute_on_ground.gd" id="2_mxrvk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yn0hp"]
+size = Vector2(128, 128)
+
+[node name="flute_on_ground" type="Sprite2D"]
+position = Vector2(192, 159)
+scale = Vector2(0.515625, 0.125)
+texture = ExtResource("1_ixqvn")
+script = ExtResource("2_mxrvk")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_yn0hp")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

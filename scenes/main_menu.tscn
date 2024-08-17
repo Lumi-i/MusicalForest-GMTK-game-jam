@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://g7ijkrfeold4"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_e3s1v"]
+
+[node name="Main Menu" type="Control"]
+texture_repeat = 1
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_e3s1v")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 171.0
+offset_top = 41.0
+offset_right = 1022.0
+offset_bottom = 166.0
+theme_override_font_sizes/font_size = 91
+text = "Forgotten Melodies"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 474.0
+offset_top = 229.0
+offset_right = 656.0
+offset_bottom = 279.0
+text = "Start Game"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 474.0
+offset_top = 291.0
+offset_right = 657.0
+offset_bottom = 342.0
+text = "Quit"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
