@@ -436,7 +436,6 @@ sources/0 = SubResource("TileSetAtlasSource_8348a")
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 position = Vector2(15, 5)
 navigation_polygon = SubResource("NavigationPolygon_gg81n")
-use_edge_connections = false
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 rotation = 3.14159
@@ -452,4 +451,8 @@ position = Vector2(359, 227)
 scale = Vector2(0.0624999, 0.0234375)
 
 [node name="tree" parent="." instance=ExtResource("4_gw4dx")]
-position = Vector2(300, 234)
+position = Vector2(285, 238)
+speed = 25
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(285, 238)

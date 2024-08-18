@@ -48,7 +48,7 @@ func play_note_with_delay(note: String, audio_path: String) -> void:
 		if current_input.size() > max_melody_length:
 			current_input.pop_front()
 
-		# Play the note
+
 		var new_sound = AudioStreamPlayer2D.new()
 		add_child(new_sound)
 		new_sound.stream = ResourceLoader.load(audio_path) as AudioStream
@@ -56,7 +56,7 @@ func play_note_with_delay(note: String, audio_path: String) -> void:
 		
 		check_melodies()
 
-		# Add a short delay before the next note can be played
+
 		is_delayed = true
 		await get_tree().create_timer(delay_duration).timeout
 		is_delayed = false
@@ -69,15 +69,12 @@ func check_melodies() -> void:
 		var melody = melodies[melody_name]
 		var melody_length = melody.size()
 
-		# Check if we have enough notes in current_input to match this melody
 		if current_input.size() >= melody_length:
-			# Extract the most recent notes of the same length as the melody
 			var start_index = current_input.size() - melody_length
 			var recent_input = current_input.slice(start_index, current_input.size())
-			
-			# Compare the recent input to the melody
+
 			if recent_input == melody:
 				print(melody_name + " detected!")
-				emit_signal("melody_detected", melody_name)  # Emit the signal correctly
+				emit_signal("melody_detected", melody_name)
 				current_input.clear()
 				break

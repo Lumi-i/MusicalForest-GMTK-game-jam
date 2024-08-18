@@ -1,76 +1,45 @@
-extends Node2D
-class_name FluteInstrument
+extends CharacterBody2D
 
-signal player_picked_up
-signal melody_detected(melody_name: String)
+@export var speed = 35
 
-@onready var player: Player = $"../Player"
-@onready var sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var nav: NavigationAgent2D = $NavigationAgent2D
+@onready var player: Player = $"../player"
+@onready var detection: Area2D = $detection
+@onready var spawn_point: Marker2D = $"../Marker2D"
 
-var current_input = []
-var max_melody_length = 10
-var delay_duration = 0.3
-var is_delayed = false
+var sees_player
+var timer_ongoing
 
-var melodies = {
-	"melody_1": ["do", "re", "mi"],
-	"melody_2": ["fa", "sol", "la"],
-	"melody_3": ["do", "fa", "la", "si"],
-	"seven_nation_army": ["la", "la", "do2", "la", "sol", "fa", "mi"]
-}
+var state = "idle"
+
+func _ready() -> void:
+	state = "idle"
 
 func _physics_process(delta: float) -> void:
-	print(current_input)
+	print("state: ", state)
+	print("timer is ongoing?: ", timer_ongoing)
 	
-	if Input.is_action_just_pressed("do"):
-		play_note_with_delay("do", "res://assets/music/flute/do.mp3")
-	if Input.is_action_just_pressed("re"):
-		play_note_with_delay("re", "res://assets/music/flute/re.mp3")
-	if Input.is_action_just_pressed("mi"):
-		play_note_with_delay("mi", "res://assets/music/flute/mi.mp3")
-	if Input.is_action_just_pressed("fa"):
-		play_note_with_delay("fa", "res://assets/music/flute/fa.mp3")
-	if Input.is_action_just_pressed("sol"):
-		play_note_with_delay("sol", "res://assets/music/flute/sol.mp3")
-	if Input.is_action_just_pressed("la"):
-		play_note_with_delay("la", "res://assets/music/flute/la.mp3")
-	if Input.is_action_just_pressed("si"):
-		play_note_with_delay("si", "res://assets/music/flute/si.mp3")
-	if Input.is_action_just_pressed("do2"):
-		play_note_with_delay("do2", "res://assets/music/flute/do2.mp3")
-
-func play_note_with_delay(note: String, audio_path: String) -> void:
-	if not is_delayed:
-		current_input.append(note)
-
-		if current_input.size() > max_melody_length:
-			current_input.pop_front()
-
-		var new_sound = AudioStreamPlayer2D.new()
-		add_child(new_sound)
-		new_sound.stream = ResourceLoader.load(audio_path) as AudioStream
-		new_sound.play()
-		
-		check_melodies()
-
-		is_delayed = true
-		await get_tree().create_timer(delay_duration).timeout
-		is_delayed = false
-
-func _on_AudioStreamPlayer2D_finished():
-	queue_free()
-
-func check_melodies() -> void:
-	for melody_name in melodies.keys():
-		var melody = melodies[melody_name]
-		var melody_length = melody.size()
-
-		if current_input.size() >= melody_length:
-			var start_index = current_input.size() - melody_length
-			var recent_input = current_input.slice(start_index, current_input.size())
+	var bodies_in_detection = detection.get_overlapping_bodies()
+	for body in bodies_in_detection:
+		if body is Player:
+			sees_player = true
+			state = "chase"
+		else:
+			sees_player = false
+			state = "idle"
+	
+	match state:
+		"idle":
+			if global_position != spawn_point.global_position - Vector2(10, 10):
+				nav.target_position = spawn_point.global_position
+				var direction = (nav.get_next_path_position() - global_position).normalized()
+				velocity = direction * speed
+				move_and_slide()
+			else:
+				velocity = Vector2.ZERO
+		"chase":
+			nav.target_position = player.global_position
+			var direction = (nav.get_next_path_position() - global_position).normalized()
+			velocity = direction * speed
 			
-			if recent_input == melody:
-				print(melody_name + " detected!")
-				emit_signal("melody_detected", melody_name)
-				current_input.clear()
-				break
+			move_and_slide()
