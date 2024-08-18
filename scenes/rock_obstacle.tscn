@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://deb0n0a53ix6p"]
+
+[ext_resource type="Script" path="res://scenes/rock_obstacle.gd" id="1_5hqem"]
+[ext_resource type="Texture2D" uid="uid://c020xmlos8weq" path="res://assets/art/pixel-art-illustration-stone-pixelated-stone-stone-pixelated-for-the-pixel-art-game-and-icon-for-website-and-video-game-old-school-retro-vector-removebg-preview.png" id="2_jm3yf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7dtvn"]
+size = Vector2(12, 3)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0fgl"]
+radius = 12.0416
+
+[node name="rock_obstacle" type="CharacterBody2D"]
+position = Vector2(0, -20)
+script = ExtResource("1_5hqem")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 2.38419e-07)
+scale = Vector2(0.0414375, 0.0517969)
+texture = ExtResource("2_jm3yf")
+
+[node name="collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_7dtvn")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="detect" type="Area2D" parent="."]
+
+[node name="detect_collision" type="CollisionShape2D" parent="detect"]
+shape = SubResource("CircleShape2D_q0fgl")

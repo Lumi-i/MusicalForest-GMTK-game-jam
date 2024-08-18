@@ -1,8 +1,13 @@
 extends CharacterBody2D
 class_name Player
 
+signal rock_pick_up
+signal rock_drop
+signal tame
+
 @onready var flute = preload("res://scenes/flute.tscn")
 @onready var flute_drop = preload("res://scenes/flute_on_ground.tscn")
+@onready var rock: CharacterBody2D = $"../rock_obstacle"
 
 
 @onready var marker_2d: Marker2D = $Marker2D
@@ -20,11 +25,12 @@ var is_detected = false
 @onready var player_sprite: Sprite2D = $Sprite2D
 
 func _ready():
-	pass
+	on_melody_detected("test")
 
 
 func _physics_process(delta: float) -> void:
-	print(is_detected)
+	
+	
 	
 	if Input.is_action_pressed("up"):
 		dir = Vector2(0, -1)
@@ -53,10 +59,21 @@ func pick_up_flute():
 	var flute_instance = flute.instantiate()
 	flute_instance.position = marker_2d.position
 	add_child(flute_instance)
+	flute_instance.connect("melody_detected", Callable(self, "on_melody_detected"))
 	current_item = "flute"
 	can_switch = false
 	await get_tree().create_timer(cooldown_switch).timeout
 	can_switch = true
 
-func melody():
-	is_detected = true
+func on_melody_detected(melody_name: String) -> void:
+	print(melody_name + " received!")
+	
+	match melody_name:
+		"pick_up_rock":
+			rock_pick_up.emit()
+		
+		"drop_rock":
+			rock_drop.emit()
+		
+		"tame":
+			tame.emit()
