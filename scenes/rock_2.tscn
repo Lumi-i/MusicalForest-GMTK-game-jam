@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://4bcqkr2merxp"]
+
+[ext_resource type="Texture2D" uid="uid://21swbfe2pgc7" path="res://assets/art/rock_part2.png" id="1_58hdr"]
+[ext_resource type="Script" path="res://scenes/rock_2.gd" id="1_ut1c8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s21pv"]
+radius = 3.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_73i41"]
+radius = 3.0
+
+[node name="rock_2" type="CharacterBody2D"]
+script = ExtResource("1_ut1c8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -20)
+scale = Vector2(0.0225564, 0.0237069)
+texture = ExtResource("1_58hdr")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_s21pv")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="hurtbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurtbox"]
+position = Vector2(0, -20)
+shape = SubResource("CircleShape2D_73i41")
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

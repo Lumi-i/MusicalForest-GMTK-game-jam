@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var speed = 35
 
 @onready var nav: NavigationAgent2D = $NavigationAgent2D
-@onready var player: Player = $"../player"
+@onready var player: Player = $"../../player"
 @onready var detection: Area2D = $detection
 @onready var spawn_point: Marker2D = $"../Marker2D"
 @onready var sprite: Sprite2D = $Sprite2D
@@ -38,16 +38,8 @@ func _physics_process(delta: float) -> void:
 				var direction = (nav.get_next_path_position() - global_position).normalized()
 				velocity = direction * speed
 				move_and_slide()
-			else:
-				velocity = Vector2.ZERO
+
 		"chase":
-			#wakes up
-			sprite.flip_v = true
-			await get_tree().create_timer(1).timeout
-			sprite.flip_v = false
-			state = "chase"
-			
-			#chases
 			nav.target_position = player.global_position
 			var direction = (nav.get_next_path_position() - global_position).normalized()
 			velocity = direction * speed
@@ -62,4 +54,5 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_player_tame() -> void:
-	is_hostile = false
+	if is_hostile:
+		is_hostile = false

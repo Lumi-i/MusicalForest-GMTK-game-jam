@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7gig66or8he4"]
+
+[ext_resource type="Script" path="res://scenes/rock_1.gd" id="1_bk770"]
+[ext_resource type="Texture2D" uid="uid://cmkdos0qcwivq" path="res://assets/art/rock_part1.png" id="1_s2fia"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8lgnr"]
+radius = 3.0
+
+[node name="rock_1" type="CharacterBody2D"]
+script = ExtResource("1_bk770")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -20)
+scale = Vector2(0.019685, 0.0172414)
+texture = ExtResource("1_s2fia")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -20)
+shape = SubResource("CircleShape2D_8lgnr")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true

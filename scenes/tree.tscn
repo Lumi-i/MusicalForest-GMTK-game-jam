@@ -4,12 +4,12 @@
 [ext_resource type="Script" path="res://scenes/tree.gd" id="1_vny4o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nr0i8"]
-size = Vector2(9, 3.5)
+size = Vector2(12, 3.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mqs6n"]
-radius = 36.0
+radius = 45.0
 
-[node name="tree" type="CharacterBody2D"]
+[node name="tree" type="CharacterBody2D" groups=["enemy", "hitable"]]
 script = ExtResource("1_vny4o")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
@@ -17,8 +17,8 @@ debug_enabled = true
 debug_path_custom_color = Color(1, 0.603922, 1, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-1.19209e-07, -1.49012e-08)
-scale = Vector2(0.0703125, 0.236328)
+position = Vector2(0, -0.614503)
+scale = Vector2(0.0975838, 0.224773)
 texture = ExtResource("1_cjrmd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -26,6 +26,8 @@ position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_nr0i8")
 
 [node name="detection" type="Area2D" parent="."]
+position = Vector2(18, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="detection"]
+position = Vector2(-18, -3)
 shape = SubResource("CircleShape2D_mqs6n")

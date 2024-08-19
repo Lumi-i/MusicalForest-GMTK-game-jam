@@ -4,31 +4,36 @@ signal player_picked_up
 signal melody_detected(melody_name: String)
 signal pick_rock_up
 
-@onready var player: Player = $"../Player"
 @onready var sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var timer: Timer = $Timer
 
 var current_input = []
 var max_melody_length = 16
-var delay_duration = 0.3
+var delay_duration = 0.3  # Delay between notes
 var is_delayed = false
+var is_playing = false  # To control the animation state
+var timer_duration = 4.0  # Duration for the animation reset
 
 var melodies = {
 	"melody_1": ["do", "re", "mi"],
 	"melody_2": ["fa", "sol", "la"],
 	"melody_3": ["do", "fa", "la", "si"],
 	"seven_nation_army": ["la", "la", "do2", "la", "sol", "fa", "mi"],
-	"pick_up_rock": ["fa", "mi", "fa", "la", "do2", "la", "sol", "la", "si", "la"],
-	"drop_rock": ["fa", "mi", "fa", "la", "do2", "si", "la"],
-	"tame": ["sol", "re", "fa", "re", "sol", "re", "sol", "si"]
+	"pick_up_rock": ["la", "si", "do2"],
+	"drop_rock": ["do2", "si", "la"],
+	"tame": ["fa", "re", "fa", "la"],
+	"break": ["do2", "la", "sol"],
+	"throw": ["do2", "la", "si"]
 }
 
-
 func _ready() -> void:
-	connect("melody_detected", Callable(player, "on_melody_detected"))
+	connect("melody_detected", Callable($player, "on_melody_detected"))
+	timer.wait_time = timer_duration
+	timer.one_shot = true
+	timer.connect("timeout", Callable(self, "_on_timer_timeout"))
 
 func _physics_process(delta: float) -> void:
-	
-	print(current_input)
+	print(timer.time_left)
 	
 	if Input.is_action_just_pressed("do"):
 		play_note_with_delay("do", "res://assets/music/flute/do.mp3")
@@ -54,12 +59,11 @@ func play_note_with_delay(note: String, audio_path: String) -> void:
 		if current_input.size() > max_melody_length:
 			current_input.pop_front()
 
-
 		var new_sound = AudioStreamPlayer2D.new()
 		add_child(new_sound)
 		new_sound.stream = ResourceLoader.load(audio_path) as AudioStream
 		new_sound.play()
-		
+
 		var detected_melody = check_melodies()
 		if detected_melody != "":
 			handle_detected_melody(detected_melody)
@@ -68,8 +72,13 @@ func play_note_with_delay(note: String, audio_path: String) -> void:
 		await get_tree().create_timer(delay_duration).timeout
 		is_delayed = false
 
-func _on_AudioStreamPlayer2D_finished():
-	queue_free()
+	# Manage the is_playing state and start the timer for animation
+	if not is_playing:
+		is_playing = true
+		timer.start()
+
+func _on_timer_timeout() -> void:
+	is_playing = false
 
 func check_melodies() -> String:
 	for melody_name in melodies.keys():
@@ -85,7 +94,9 @@ func check_melodies() -> String:
 				return melody_name
 	return ""
 
-
 func handle_detected_melody(melody_name: String) -> void:
 	emit_signal("melody_detected", melody_name)
 	print(melody_name + " i have handled")
+
+func _on_AudioStreamPlayer2D_finished():
+	queue_free()

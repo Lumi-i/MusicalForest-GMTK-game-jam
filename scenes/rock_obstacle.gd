@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@onready var player: Player = $"../player"
+@onready var player: Player = $"../../player"
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision: CollisionShape2D = $collision
 @onready var nav: NavigationAgent2D = $NavigationAgent2D
@@ -40,13 +40,6 @@ func _physics_process(delta: float) -> void:
 				move_and_slide()
 	
 	
-	if Input.is_action_just_pressed("f") and in_air:
-		var fall = create_tween()
-		print("hey")
-		fall.tween_property(sprite, "position:y", 0, 1)
-		await fall.finished
-		in_air = false
-		state = "grounded"
 
 
 func _rock_picked_up() -> void:
@@ -66,3 +59,7 @@ func _on_player_rock_drop() -> void:
 		await fall.finished
 		in_air = false
 		state = "grounded"
+
+
+func _on_player_remove_rock() -> void:
+	queue_free()

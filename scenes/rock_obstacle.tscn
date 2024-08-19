@@ -9,7 +9,7 @@ size = Vector2(12, 3)
 [sub_resource type="CircleShape2D" id="CircleShape2D_q0fgl"]
 radius = 12.0416
 
-[node name="rock_obstacle" type="CharacterBody2D"]
+[node name="rock_obstacle" type="CharacterBody2D" groups=["hitable"]]
 position = Vector2(0, -20)
 script = ExtResource("1_5hqem")
 
